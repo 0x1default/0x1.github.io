@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>0x1 Cheat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      background-color: #000;
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+    .background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') center/cover no-repeat;
+      filter: blur(8px) brightness(0.4);
+      z-index: -2;
+      transition: filter 0.8s ease;
+    }
+    
+    .background.extra-blur {
+      filter: blur(20px) brightness(0.2);
+    }
+    
+    /* Background Particles */
+    .particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle-bg {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8), rgba(0, 255, 255, 0.5), rgba(255, 0, 255, 0));
+      filter: blur(1px);
+      pointer-events: none;
+      animation: float 15s infinite linear;
+      z-index: 1;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(calc(100vw - 200px), calc(-100vh + 200px)) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    .splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 1s ease;
+    }
+    .splash.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .splash img {
+      max-width: 80%;
+      animation: zoomIn 2s ease forwards;
+      opacity: 0;
+    }
+    @keyframes zoomIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Click To Show overlay */
+    .click-to-show {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 1s ease;
+      cursor: pointer;
+    }
+    
+    .click-to-show.show {
+      opacity: 1;
+    }
+    
+    .click-to-show-text {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 5px #fff, 0 0 10px #f0f, 0 0 15px #0ff, 0 0 20px #0ff;
+      animation: neonGlow 2s infinite alternate;
+      transition: transform 0.3s ease;
+    }
+    
+    .click-to-show:hover .click-to-show-text {
+      transform: scale(1.1);
+    }
+    
+    .main-content {
+      display: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .main-content.show {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      height: 100vh;
+    }
+    .panel {
+      background-color: rgba(10, 10, 20, 0.8);
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 800px;
+      position: relative;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+      margin: 20px 0;
+    }
+    .panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+      padding: 3px;
+      background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffff, #ff00cc);
+      background-size: 300% 300%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      animation: rgbBorder 6s ease infinite;
+    }
+    @keyframes rgbBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 5px #fff, 0 0 10px #f0f, 0 0 15px #0ff, 0 0 20px #0ff;
+      animation: neonGlow 2s infinite alternate;
+    }
+    @keyframes neonGlow {
+      0% { text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff; }
+      100% { text-shadow: 0 0 5px #00ffff, 0 0 10px #ff00ff; }
+    }
+    .btn {
+      font-size: 1.1rem;
+      padding: 12px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      background: linear-gradient(90deg, #ff00cc, #3333ff, #00ffff, #ff00cc);
+      background-size: 400% 400%;
+      animation: rgbShift 6s ease infinite;
+      box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00cc;
+      transition: transform 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      transform: scale(1.1);
+    }
+    @keyframes rgbShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .discord-icon {
+      font-size: 24px;
+      font-family: 'Press Start 2P', cursive;
+      color: white;
+      margin-top: 15px;
+      opacity: 0.6;
+      transition: opacity 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .discord-icon i {
+      font-size: 28px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .discord-icon:hover { 
+      opacity: 1;
+      transform: scale(1.05);
+      text-shadow: 0 0 5px #7289da, 0 0 10px #7289da;
+    }
+    iframe {
+      width: 100%;
+      height: 315px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    
+    /* Fire download button styles */
+    .download-btn {
+      position: relative;
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      background: linear-gradient(90deg, #ff6000, #ff9500);
+      box-shadow: 0 0 15px #ff6000;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .download-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #ff6000;
+    }
+    
+    .download-btn:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -10%;
+      width: 120%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        transparent 0%,
+        rgba(255, 96, 0, 0.6) 40%,
+        transparent 50%,
+        rgba(255, 149, 0, 0.6) 60%,
+        transparent 70%
+      );
+      z-index: -1;
+      animation: fire-animation 3s infinite;
+    }
+    
+    @keyframes fire-animation {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.1); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    
+    .fire-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    
+    .particle {
+      position: absolute;
+      bottom: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8), rgba(255, 165, 0, 0.8), rgba(255, 0, 0, 0));
+      animation: rise 2s infinite ease-out;
+    }
+    
+    @keyframes rise {
+      0% {
+        opacity: 1;
+        bottom: 0;
+        transform: translateX(0) scale(0.3);
+      }
+      100% {
+        opacity: 0;
+        bottom: 100%;
+        transform: translateX(calc(20px - (random * 40px))) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background" id="background"></div>
+  
+  <!-- Background Particles -->
+  <div class="particles-container" id="particlesContainer"></div>
+
+  <!-- Splash Screen -->
+  <div class="splash" id="splash">
+    <img src="xd.png" alt="0x1 Cheat">
+  </div>
+
+  <!-- Click To Show Overlay -->
+  <div class="click-to-show" id="clickToShow">
+    <div class="click-to-show-text">Click To Show</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="main-content">
+    <div class="panel">
+      <h1>Welcome to 0x1 Cheat</h1>
+
+      <!-- ✅ Embedded Streamable video with audio control interaction -->
+      <iframe id="gameVideo" src="https://streamable.com/e/7pa7di" allowfullscreen></iframe>
+
+      <div class="buttons">
+        <a href="YOUR_DOWNLOAD_LINK_HERE" class="download-btn" id="downloadBtn">
+          <div class="fire-particles" id="fireParticles"></div>
+          <i class="fas fa-download"></i> Download Cheat
+        </a>
+        <a href="https://discord.gg/yUU3JEtJ2p" class="discord-icon" target="_blank">
+          <i class="fab fa-discord"></i> Join Our Discord
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <audio id="autoplay-audio" preload="auto">
+    <source src="welcome-audio.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Create background particles
+    function createBackgroundParticles() {
+      const container = document.getElementById('particlesContainer');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < 40; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle-bg';
+        
+        // Random properties
+        const size = Math.random() * 50 + 10;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 15;
+        const duration = Math.random() * 10 + 10;
+        const opacity = Math.random() * 0.6 + 0.2; // Increased opacity
+        
+        // Random color
+        const colors = ['#ff00de', '#00ffff', '#ff3300', '#33ff00', '#0033ff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.opacity = opacity;
+        particle.style.boxShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+        
+        container.appendChild(particle);
+      }
+    }
+    
+    // Call the function immediately when the script loads
+    document.addEventListener("DOMContentLoaded", createBackgroundParticles);
+
+    // Create fire particles for the download button
+    function createFireParticles() {
+      const container = document.getElementById('fireParticles');
+      const btn = document.getElementById('downloadBtn');
+      
+      // Clear existing particles
+      container.innerHTML = '';
+      
+      // Create new particles
+      for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random properties
+        const size = Math.random() * 15 + 5;
+        const posX = Math.random() * 100;
+        const delay = Math.random() * 1;
+        const duration = Math.random() * 1 + 1;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        
+        container.appendChild(particle);
+      }
+    }
+    
+    function playClickSound() {
+      const clickSound = new Audio();
+      clickSound.src = 'data:audio/wav;base64,UklGRiQDAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQADAAAAAAAAAAAAAAAAAAAAAABmZmYAAACAgIBmZmYAAAAAAACAgID///+AgID///8AAAAAAAAAAAAAAACAgIAAAAAAAACAgIAAAACAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAgIA//8AAAAAAACAgICAgIAAAADMzMwAAP//AAAAAL+/vwAAAAAAAABmZmYAAAAAAAAAAAB/f38AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvr6+AICAgAAAAAAAAAAAAACAgIAAAABmZmYAAAAAAACAgAAAAACpqKgAAAAAAACAgIAAAACAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBgIAAAAAAAAAAAACAgIAAAAAAAAAAAAAAAACAgIAAAAAAAAAAAACAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAgIAAAAAAAACBAAAAgICA////gICAAAAAAAAAAAAAAAAAAAAAAAAAAAA=';
+      clickSound.play();
+    }
+
+    // Main initialization
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('fade-out');
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        
+        // Show Click To Show overlay and blur background
+        document.getElementById('background').classList.add('extra-blur');
+        const clickToShow = document.getElementById('clickToShow');
+        clickToShow.classList.add('show');
+        
+        // Add click event to reveal the website
+        clickToShow.addEventListener('click', () => {
+          playClickSound();
+          
+          // Hide the Click To Show overlay
+          clickToShow.classList.remove('show');
+          setTimeout(() => {
+            clickToShow.style.display = 'none';
+          }, 1000);
+          
+          // Remove extra blur from background
+          document.getElementById('background').classList.remove('extra-blur');
+          
+          // Show the main content
+          document.getElementById('main-content').classList.add('show');
+          document.body.style.overflow = 'auto';
+          
+          // Handle audio
+          const audio = document.getElementById('autoplay-audio');
+          audio.volume = 0.5;
+          audio.muted = false;
+          audio.loop = true;
+          audio.play().catch(error => {
+            console.log("Auto-play prevented, trying alternative methods");
+            
+            // Try with user interaction event listener
+            const playOnInteraction = () => {
+              audio.play();
+              document.removeEventListener('click', playOnInteraction);
+              document.removeEventListener('keydown', playOnInteraction);
+              document.removeEventListener('touchstart', playOnInteraction);
+            };
+            
+            document.addEventListener('click', playOnInteraction);
+            document.addEventListener('keydown', playOnInteraction);
+            document.addEventListener('touchstart', playOnInteraction);
+          });
+          
+          // Initialize fire particles
+          createFireParticles();
+          setInterval(createFireParticles, 2000);
+          
+          // Add hover effect for download button
+          const downloadBtn = document.getElementById('downloadBtn');
+          downloadBtn.addEventListener('mouseenter', () => {
+            createFireParticles();
+          });
+        });
+        
+        // Initialize background particles
+        createBackgroundParticles();
+        setInterval(createBackgroundParticles, 20000);
+        
+        // Handle video/audio interaction
+        const gameVideo = document.getElementById('gameVideo');
+        const audioElement = document.getElementById('autoplay-audio');
+        
+        // Add event listener for when the iframe loads
+        gameVideo.addEventListener('load', function() {
+          // Try to access the iframe content (may be restricted by CORS)
+          try {
+            // Add click event listener to the iframe
+            gameVideo.contentWindow.document.addEventListener('click', function() {
+              // Pause the audio when iframe is clicked (indicating video playback)
+              audioElement.pause();
+            });
+          } catch (e) {
+            console.log("Could not add direct event listener to iframe due to CORS");
+          }
+        });
+        
+        // Alternative approach - add click listener to the iframe element
+        gameVideo.addEventListener('click', function() {
+          // Pause audio when iframe is clicked
+          audioElement.pause();
+        });
+      }, 1000);
+    }, 3000);
+  </script>
+</body>
+</html>
